@@ -1,16 +1,17 @@
 <template>
   <v-container :fluid="true" class="fill-height py-3">
+    <div class="back">
     <v-row>
       <v-col cols="3">
-        <h1>Nosotros</h1>
+        <h1 class="ml-4 mt-4 display-3">Nosotros</h1>
       </v-col>
     </v-row>
     <v-row>
-      <v-col cols="8">
-        <v-img src="@/assets/Koala.jpg"></v-img>
+      <v-col cols="7">
+        <img class="ml-4" src="~/assets/Koala.jpg" width="100%"></img>
       </v-col>
-      <v-col cols="4">
-        <p>
+      <v-col cols="5">
+        <p class="mr-4 color">
           What is Lorem Ipsum?
           Lorem Ipsum is simply dummy text of the printing and typesetting industry.
           Lorem Ipsum has been the industry's standard dummy text ever since the 1500s,
@@ -22,6 +23,7 @@
         </p>
       </v-col>
     </v-row>
+    </div>
   </v-container>
 </template>
 
@@ -43,5 +45,13 @@ export default {
 </script>
 
 <style scoped>
-
+ .back{
+   background-color:rgba(0, 0, 0, 0.3);
+ }
+ .display-3{
+   color:white;
+ }
+ .color{
+   color:white;
+ }
 </style>
