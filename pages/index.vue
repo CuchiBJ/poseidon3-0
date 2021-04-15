@@ -1,5 +1,5 @@
 <template>
-  <v-row justify="center" align="center">
+  <v-row justify="center" align="center" v-show="log">
     <v-col>
       <v-row>
         <v-col>
@@ -302,9 +302,12 @@ export default {
       ],
     };
   },
+  asyncData(){
+    let log = false
+    return log 
+  },
   async beforeCreate(){
       const cookie = Cookie.get("access_token")
-      console.log(cookie)
       if (cookie) {
         const decoded = JWTDecode(cookie);
 
@@ -325,10 +328,9 @@ export default {
           this.$store.commit("users/SET_USER", currentUser);
         }
         this.$router.push("/admin");
+      } else {
+        this.log = true
       }
-    
-  },
-  created(){
     
   },
   methods: {

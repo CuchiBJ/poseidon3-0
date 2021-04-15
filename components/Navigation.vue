@@ -95,7 +95,9 @@ export default {
     async logout() {
       await auth.signOut();
       await Cookie.remove("access_token");
-      location.href = "/";
+      this.$store.commit("users/SET_USER", null)
+      this.$router.push("/");
+      
     }
   }
 };
