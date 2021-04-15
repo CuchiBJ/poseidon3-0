@@ -1,9 +1,9 @@
 <template>
   <div>
-    <v-toolbar
-      dark
+    <v-toolbar class="menu"
+      dense
+      flat
       prominent
-      src="https://cdn.vuetifyjs.com/images/backgrounds/vbanner.jpg"
     >
       <v-toolbar-items v-show='!isLogedIn'>
         <v-list-item
@@ -104,5 +104,8 @@ export default {
 <style>
   .no-deco{
     text-decoration: none;
+  }
+  .menu{
+    background-image: linear-gradient(to right,#4158D0 0%,#C850C0 50%, #FFCC70 100%);
   }
 </style>
