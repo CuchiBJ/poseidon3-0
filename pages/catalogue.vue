@@ -1,8 +1,11 @@
 <template>
   <v-container :fluid="true" class="fill-height py-3">
     <v-row class="fill-height">
-      <v-col cols="12">
-        <h1>catalogo</h1> 
+      <v-col cols="3 op">
+          <h1 class="display-1">Filtros</h1>
+      </v-col>
+      <v-col cols="9">
+        <h1 class="display-1">Catálogo</h1> 
         <ProductSlider :products="auxproducts" :lastFirst="last" :query="query" sliderName="Las ofertas" />
         <ProductSlider :products="auxproducts" :lastFirst="last" :query="query" sliderName="Las nuevas del invierno" />
       </v-col>
@@ -53,5 +56,7 @@ export default {
 </script>
 
 <style scoped>
-
+.op{
+  background-color: rgba(0, 0, 0, 0.2);;
+}
 </style>

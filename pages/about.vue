@@ -46,7 +46,7 @@ export default {
 
 <style scoped>
  .back{
-   background-color:rgba(0, 0, 0, 0.3);
+   background-color:rgba(0, 0, 0, 0.2);
  }
  .display-3{
    color:white;

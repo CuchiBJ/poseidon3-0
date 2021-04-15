@@ -2,7 +2,7 @@
   <v-app class="back">
     <Nav></Nav>
     <v-main>
-      <v-container>
+      <v-container :fluid="true">
         <nuxt />
       </v-container>
     </v-main>
