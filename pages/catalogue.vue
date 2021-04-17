@@ -3,6 +3,7 @@
     <v-row class="fill-height">
       <v-col cols="3 op">
           <h1 class="display-1">Filtros</h1>
+          <filtros></filtros>
       </v-col>
       <v-col cols="9">
         <h1 class="display-1">Catálogo</h1> 
@@ -19,7 +20,7 @@ import {Product} from '@/model/product.js'
 import {Variant} from '@/model/variant.js'
 
 import ProductSlider from '@/components/productSlider'
-
+import filtros from '@/components/Filtros'
 export default {
   name: "catalogue",
   data() {
@@ -27,7 +28,7 @@ export default {
       
     };
   },
-  components: { ProductSlider },
+  components: { ProductSlider, filtros},
   async asyncData ({ app, store }) {
     const query = productsCollection.limit(2)
     try {
