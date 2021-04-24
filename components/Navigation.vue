@@ -66,7 +66,9 @@ export default {
         {name:"inicio", route: "/"},
         {name:"Nosotros", route: "/about"},
         {name:"Catalogo", route: "/catalogue"},
-        {name:"Iniciar sesion", route: "/login"}
+        {name:"Iniciar sesion", route: "/login"},
+        {name:"Carrito", route: "/client/cart"}
+
       ],
       user: {
         rol:''
