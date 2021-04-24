@@ -3,6 +3,19 @@ import cookieparser from "cookieparser";
 import { usersCollection } from '@/services/firebase.js'
 import { User } from '../model/user.js'
 
+
+export const state = () => ({
+  snackBar: false,
+  snackText: "",
+});
+
+export const mutations = {
+  activeSnack: (state, text) =>{
+    state.snackBar = true,
+    state.snackText = text
+  }
+};
+
 export const actions = {
   async nuxtServerInit({ commit }, { req }) {
     if (process.server && process.static) return;

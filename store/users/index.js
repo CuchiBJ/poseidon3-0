@@ -4,7 +4,7 @@ import { auth, usersCollection } from '@/services/firebase.js'
 
 export const state = () => ({
   user: null
-});
+}); 
 
 export const mutations = {
   SET_USER: (state, account) => {

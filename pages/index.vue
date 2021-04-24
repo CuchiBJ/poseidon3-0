@@ -268,6 +268,9 @@
         >
       </v-row>
     </v-col>
+    <v-snackbar v-model="$store.state.snackBar" timeout="4000" top>
+      {{ $store.state.snackText }}
+    </v-snackbar>
   </v-row>
 </template>
 
@@ -304,7 +307,7 @@ export default {
   },
   asyncData(){
     let log = false
-    return log 
+    return {log} 
   },
   async beforeCreate(){
       const cookie = Cookie.get("access_token")
