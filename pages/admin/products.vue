@@ -40,6 +40,7 @@
                             <v-text-field v-model="editedItem.description" label="Descripcion" :rules="rules" required></v-text-field>
                             <v-text-field v-model="editedItem.price" label="Precio" :rules="rules" required></v-text-field>
                             <v-text-field v-model="editedItem.supplier" label="proveedor" :rules="rules" required></v-text-field>
+                            
                           </v-col>
                         </v-row>
                       </v-form>
@@ -91,12 +92,12 @@ export default {
       page:2,
       pagination:{
         page: 1,
-        itemsPerPage: 2
+        itemsPerPage: 10
       },
       rules: [(v) => !!v || "campo es requerido"],
       editedIndex: -1,
-      editedItem: {id: -1, name: "", description: "", price: 0, brand: ""},
-      defaultItem: {id: -1, name: "", description: "", price: 0, brand: ""},
+      editedItem: new Product({}),
+      defaultItem: new Product({}),
       valid: false,
       dialog: false
     };
@@ -110,29 +111,20 @@ export default {
   methods:{
     editItem(item) {
       this.editedIndex = this.products.indexOf(item);
-      this.editedItem = Object.assign({}, item);
+      this.editedItem = Object.assign(new Product({}), item);
       this.dialog = true;
     },
     close() {
       this.dialog = false;
       this.$nextTick(() => {
-        this.editedItem = Object.assign({}, this.defaultItem);
+        this.editedItem = Object.assign(new Product({}), this.defaultItem);
         this.editedIndex = -1;
       });
     },
     async save() {
       this.$nuxt.$loading.start()
       if (this.editedIndex > -1) {
-        await productsCollection.doc(this.editedItem.id).update({
-          name: this.editedItem.name,
-          brand: this.editedItem.brand,
-          description: this.editedItem.description,
-          price: this.editedItem.price,
-          supplier: this.editedItem.supplier,
-          categories: [],
-          sizes:[],
-          colors:[]
-        })
+        await Product.updateProduct(this.editedItem)
         .then(() => {
           Object.assign(this.products[this.editedIndex], this.editedItem);
           this.$store.commit('activeSnack', 'El producto se actualizo correctamente')
@@ -141,25 +133,23 @@ export default {
           this.$store.commit('activeSnack', 'Se produjo un error al actualizar el producto, Intente nuevamente')
         });
       } else { 
-          await productsCollection.add(this.editedItem)
-          .then((data) => {
-            this.editedItem.docId = data.id
-            this.products.push(this.editedItem);
-            this.$store.commit('activeSnack', 'El producto se registro correctamente')
-          })
-          .catch(() => {
-            this.$store.commit('activeSnack', 'Se produjo un error al cargar el producto, Intente nuevamente')
-          });
+        await Product.addProduct(this.editedItem)
+        .then((product) => {
+          this.products.push(product);
+          this.$store.commit('activeSnack', 'El producto se registro correctamente')
+        })
+        .catch(() => {
+          this.$store.commit('activeSnack', 'Se produjo un error al cargar el producto, Intente nuevamente')
+        });
       }
       this.$nuxt.$loading.finish()
       this.close();
     },
     async deleteItem(item) {
       const index = this.products.indexOf(item); // Se queda con el index para luego, en caso de desearlo, eliminar el producto de la tabla.
-      var result = confirm(`Seguro que quiere Eliminar el producto ${item.name} ?`);
+      let result = confirm(`Seguro que quiere Eliminar el producto ${item.name} ?`);
       if (result == true) {
-        await productsCollection.doc(item.id)
-        .delete()
+        await Product.deleteProduct(item)
         .then(() => {
           this.products.splice(index, 1);
           this.$store.commit('activeSnack', 'El producto se elimino correctamente')

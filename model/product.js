@@ -6,7 +6,7 @@ export class Product {
 
   static last = null
 
-  constructor(id, description, brand, name, supplier, sizes, colors, categories, price){
+  constructor({id= -1, description= "", brand= "", name= "", supplier= "", sizes= [], colors= [], categories= [], price= 0}){
     this.id = id;
     this.description = description;
     this.brand = brand;
@@ -67,10 +67,9 @@ export class Product {
         let products = []
         querySnapshot.forEach((doc) => {
           products.push(new Product(
-            doc.id, doc.data().description, doc.data().brand, doc.data().name, doc.data().supplier, doc.data().sizes, doc.data().colors, doc.data().categories, doc.data().price
+            { id: doc.id, description: doc.data().description, brand: doc.data().brand, name: doc.data().name, supplier: doc.data().supplier, sizes: doc.data().sizes, colors: doc.data().colors, categories: doc.data().categories, price: doc.data().price}
           ));
         });
-        let last = querySnapshot.docs[querySnapshot.docs.length - 1]
         this.last = querySnapshot.docs[querySnapshot.docs.length - 1]
         return { products }
       })
@@ -91,7 +90,7 @@ export class Product {
         let products = []
         querySnapshot.forEach((doc) => {
           products.push(new Product(
-            doc.id, doc.data().description, doc.data().brand, doc.data().name, doc.data().supplier, doc.data().sizes, doc.data().colors, doc.data().categories, doc.data().price
+            {id: doc.id, description: doc.data().description, brand: doc.data().brand, name: doc.data().name, supplier: doc.data().supplier, sizes: doc.data().sizes, colors: doc.data().colors, categories: doc.data().categories, price: doc.data().price}
           ));
         });
         this.last = querySnapshot.docs[querySnapshot.docs.length - 1]
@@ -101,6 +100,48 @@ export class Product {
     } catch (error) {
       console.log(error)
     }
+  }
+
+  static async addProduct(product){
+    product = await productsCollection.add(product)
+    .then((data) => {
+      product.id = data.id
+      return product
+    })
+    .catch((error) => {
+      throw error
+    });
+    return product
+  }
+
+  static async updateProduct(product){
+    await productsCollection.doc(product.id).update({
+      name: product.name,
+      brand: product.brand,
+      description: product.description,
+      price: product.price,
+      supplier: product.supplier,
+      categories: [],
+      sizes:[],
+      colors:[]
+    })
+    .then(() => {
+      return product
+    })
+    .catch((error) => {
+      throw error
+    });
+  }
+
+  static async deleteProduct(product){
+    await productsCollection.doc(product.id)
+    .delete()
+    .then(() => {
+      return 1
+    })
+    .catch((error) => {
+      throw error
+    });
   }
 
 }
