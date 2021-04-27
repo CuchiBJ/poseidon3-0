@@ -56,7 +56,7 @@
           </template>
         </v-data-table>
       </v-col>
-      <v-col>
+      <v-col cols="2">
         otra fila
       </v-col>
     </v-row>
@@ -84,8 +84,8 @@ export default {
       ],
       rules: [(v) => !!v || "campo es requerido"],
       editedIndex: -1,
-      editedItem: {id: -1, name: "", description: "", precio: 0, brand: ""},
-      defaultItem: {id: -1, name: "", description: "", precio: 0, brand: ""},
+      editedItem: {id: -1, name: "", description: "", price: 0, brand: ""},
+      defaultItem: {id: -1, name: "", description: "", price: 0, brand: ""},
       valid: false,
       dialog: false
     };
@@ -100,7 +100,7 @@ export default {
         let products = []
         querySnapshot.forEach((doc) => {
           products.push(new Product(
-            doc.id, doc.data().description, doc.data().brand, doc.data().name, doc.data().supplier, doc.data().sizes, doc.data().colors, doc.data().categories
+            doc.id, doc.data().description, doc.data().brand, doc.data().name, doc.data().supplier, doc.data().sizes, doc.data().colors, doc.data().categories, doc.data().price
           ));
         });
         let last = querySnapshot.docs[querySnapshot.docs.length - 1]
@@ -131,8 +131,11 @@ export default {
           name: this.editedItem.name,
           brand: this.editedItem.brand,
           description: this.editedItem.description,
-          price: this.editedItem.precio,
-          supplier: this.editedItem.supplier
+          price: this.editedItem.price,
+          supplier: this.editedItem.supplier,
+          categories: [],
+          sizes:[],
+          colors:[]
         })
         .then(() => {
           Object.assign(this.products[this.editedIndex], this.editedItem);
@@ -156,11 +159,11 @@ export default {
       this.close();
     },
     async deleteItem(item) {
-      this.$store.commit('activateLoading')
       const index = this.products.indexOf(item); // Se queda con el index para luego, en caso de desearlo, eliminar el producto de la tabla.
-      var result = confirm(`Seguro que quiere Eliminar el producto ${item.nombre} de ${item.marca} ${item.modelo} ?`);
+      var result = confirm(`Seguro que quiere Eliminar el producto ${item.name} ?`);
       if (result == true) {
-        await productSer.deleteProducto(item)
+        await productsCollection.doc(item.id)
+        .delete()
         .then(() => {
           this.products.splice(index, 1);
           this.$store.commit('activeSnack', 'El producto se elimino correctamente')
@@ -169,7 +172,6 @@ export default {
           this.$store.commit('activeSnack', 'Se produjo un error al eliminar el producto, Intente nuevamente')
         });
       }
-      this.$store.commit('deactivateLoading')
     }
   }
 };

@@ -13,6 +13,10 @@ export const mutations = {
   activeSnack: (state, text) =>{
     state.snackBar = true,
     state.snackText = text
+  },
+  deactiveSnack: (state) =>{
+    state.snackBar = false,
+    state.snackText = ""
   }
 };
 

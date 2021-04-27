@@ -4,8 +4,12 @@
     <v-main>
       <v-container :fluid="true">
         <nuxt />
+        
       </v-container>
     </v-main>
+    <v-snackbar v-model="snackActivator" timeout="4000" top>
+      {{ $store.state.snackText }}
+    </v-snackbar>
   </v-app>
 </template>
 
@@ -14,30 +18,27 @@ import Nav from "@/components/Navigation";
 export default {
   data() {
     return {
-      clipped: false,
-      drawer: false,
-      fixed: false,
-      items: [
-        {
-          icon: "mdi-apps",
-          title: "Welcome",
-          to: "/",
-        },
-        {
-          icon: "mdi-chart-bubble",
-          title: "Inspire",
-          to: "/inspire",
-        },
-      ],
-      miniVariant: false,
-      right: true,
-      rightDrawer: false,
-      title: "Vuetify.js",
+      snackVal: false
     };
   },
   components: {
     Nav,
   },
+  computed:{
+    snackActivator:{
+      get: function () {
+        return this.$store.state.snackBar
+      },
+      set: function () {
+        this.$store.commit("deactiveSnack")
+      }
+      
+    }
+  },
+  watch:{
+
+  }
+
 };
 </script>
 

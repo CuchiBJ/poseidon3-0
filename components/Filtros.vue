@@ -32,7 +32,7 @@
     <v-list
       class="list-group-item ml-1"
       v-for="color in colors"
-      :key="color"
+      :key="color.color"
     >
       <v-checkbox
         :color="color.color"

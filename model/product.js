@@ -2,7 +2,7 @@ import {Variant} from './variant.js'
 
 export class Product {
 
-  constructor(id, description, brand, name, supplier, sizes, colors, categories){
+  constructor(id, description, brand, name, supplier, sizes, colors, categories, price){
     this.id = id;
     this.description = description;
     this.brand = brand;
@@ -10,6 +10,7 @@ export class Product {
     this.supplier = supplier;
     this.sizes = sizes;
     this.colors = colors;
+    this.price = price;
     this.categories = categories;
     this.variants = [{
       id: "",
