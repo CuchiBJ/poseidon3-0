@@ -7,11 +7,16 @@
       <v-divider inset vertical> </v-divider>
       <v-col cols="8">
         <v-data-table 
+          v-model="selected"
           :headers="headers" :items="products"
           sort-by="name" 
           class="elevation-1" 
           show-select 
-          dark>
+          dark
+          :options.sync="pagination"
+          v-on:pagination="handlePagination()"
+          v-on:item-selected="handleSelection()"
+          v-on:toggle-select-all="handleSelection()">
           <template v-slot:top>
             <v-toolbar flat class="tenloFondo">
               <v-toolbar-title class="text--primary font-weight-medium">Productos</v-toolbar-title>
@@ -82,6 +87,12 @@ export default {
         {text: "Proveedro", align: "start", value: "supplier"},
         {text: "Acciones", value: "actions", sortable: false}
       ],
+      selected:[],
+      page:2,
+      pagination:{
+        page: 1,
+        itemsPerPage: 2
+      },
       rules: [(v) => !!v || "campo es requerido"],
       editedIndex: -1,
       editedItem: {id: -1, name: "", description: "", price: 0, brand: ""},
@@ -90,26 +101,11 @@ export default {
       dialog: false
     };
   },
-  components: {Filtros},
+  components: {
+    Filtros
+  },
   async asyncData ({ app, store }) {
-    const query = productsCollection.limit(10)
-    try {
-      let products = await query
-      .get()
-      .then((querySnapshot) => {
-        let products = []
-        querySnapshot.forEach((doc) => {
-          products.push(new Product(
-            doc.id, doc.data().description, doc.data().brand, doc.data().name, doc.data().supplier, doc.data().sizes, doc.data().colors, doc.data().categories, doc.data().price
-          ));
-        });
-        let last = querySnapshot.docs[querySnapshot.docs.length - 1]
-        return { products,  last, query}
-      })
-      return products       
-    } catch (error) {
-      return {error}
-    } 
+    return await Product.getProducts({limit: 20})
   },
   methods:{
     editItem(item) {
@@ -172,6 +168,26 @@ export default {
           this.$store.commit('activeSnack', 'Se produjo un error al eliminar el producto, Intente nuevamente')
         });
       }
+    },
+    async next(){
+      let auxproducts = await Product.getNext({limit: 10})
+
+      if(!auxproducts) return
+
+      auxproducts.forEach((prod) => {
+        this.products.push(prod); 
+      })
+    },
+    handlePagination(){
+      if (this.pagination.page == this.page) {
+        this.next()
+        this.page = this.pagination.page + 1  
+      }
+    },
+    handleSelection(){
+      this.$nextTick(() => {
+        console.log(this.selected)
+      })
     }
   }
 };
